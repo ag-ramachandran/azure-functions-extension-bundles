@@ -240,6 +240,7 @@ namespace Build
                 var response = httpClient.GetAsync(zipUri).GetAwaiter().GetResult();
                 if (!response.IsSuccessStatusCode)
                 {
+                    Console.WriteLine($"Download failed with response code:{response.IsSuccessStatusCode}");
                     return false;
                 }
 

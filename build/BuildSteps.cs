@@ -78,6 +78,20 @@ namespace Build
             {
                 FileUtility.EnsureDirectoryExists(Settings.ManifestToolDirectory);
                 ZipFile.ExtractToDirectory(zipFilePath, Settings.ManifestToolDirectory);
+
+                var dir = new DirectoryInfo(Settings.ManifestToolDirectory);
+
+                // Get the files in the directory and copy them to the new location.
+                var files = dir.GetFiles();
+                foreach (var file in files)
+                {
+                    Console.WriteLine(file.FullName);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Download failed for ManifestUtility");
+                throw new Exception("Download failed for ManifestUtility");
             }
         }
 
@@ -180,7 +194,7 @@ namespace Build
             Shell.Run("dotnet", publishCommandArguments);
 
             // Temporary fix to copy assembly needed for cosmosDb extension
-            var additionalAssembliesPath = Path.Combine(Directory.GetParent(projectFilePath).FullName, "bin" , "Release", "netcoreapp3.1", buildConfig.RuntimeIdentifier == "any" ? String.Empty : buildConfig.RuntimeIdentifier, "System.Configuration.ConfigurationManager.dll");
+            var additionalAssembliesPath = Path.Combine(Directory.GetParent(projectFilePath).FullName, "bin", "Release", "netcoreapp3.1", buildConfig.RuntimeIdentifier == "any" ? String.Empty : buildConfig.RuntimeIdentifier, "System.Configuration.ConfigurationManager.dll");
             if (Path.Combine(buildConfig.PublishDirectoryPath, "bin") != buildConfig.PublishBinDirectoryPath)
             {
                 FileUtility.EnsureDirectoryExists(Directory.GetParent(buildConfig.PublishBinDirectoryPath).FullName);
